@@ -1,15 +1,16 @@
 package com.rakayby.blog.controller;
 
 import com.rakayby.blog.constant.ApiEndPoints;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
  *
- * @author Rakayby
+ * @author Mohammed.Rakayby
  */
 @RestController
-@RequestMapping(ApiEndPoints.Home)
-public class NavigationController {
+@RequestMapping(value = ApiEndPoints.Controllers.USER_CONTROLLER, consumes = MediaType.APPLICATION_JSON_VALUE)
+public class UserController {
     
-}   
+}

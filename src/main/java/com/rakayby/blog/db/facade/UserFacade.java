@@ -1,14 +1,23 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.rakayby.blog.db.facade;
+
+import com.rakayby.blog.db.service.UserService;
+import com.rakayby.blog.model.User;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Rakayby
  */
+@Component
 public class UserFacade {
-    
+
+    private final UserService userService;
+
+    public UserFacade(UserService userService) {
+        this.userService = userService;
+    }
+
+    public Boolean create(User user) {
+        return userService.create(user);
+    }
 }

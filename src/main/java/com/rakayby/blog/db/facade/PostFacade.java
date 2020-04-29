@@ -2,6 +2,7 @@ package com.rakayby.blog.db.facade;
 
 import com.rakayby.blog.db.service.PostService;
 import com.rakayby.blog.model.Post;
+import java.util.List;
 import org.springframework.stereotype.Component;
 
 /**
@@ -19,5 +20,9 @@ public class PostFacade {
 
     public Boolean savePost(Post post) {
         return postService.savePost(post);
+    }
+
+    public List<Post> getAll() {
+        return this.postService.getAll();
     }
 }

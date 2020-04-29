@@ -19,4 +19,9 @@ public class ApiEndPoints {
         public static final String GET = "get";
         public static final String EDIT = "edit";
     }
+
+    public static class PostController {
+
+        public static final String GET_ALL = "getAll";
+    }
 }

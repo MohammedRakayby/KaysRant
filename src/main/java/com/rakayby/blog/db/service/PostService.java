@@ -2,6 +2,7 @@ package com.rakayby.blog.db.service;
 
 import com.rakayby.blog.db.repository.PostRepository;
 import com.rakayby.blog.model.Post;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,5 +20,9 @@ public class PostService {
 
     public Boolean savePost(Post post) {
         return this.postRepository.save(post) != null;
+    }
+
+    public List<Post> getAll() {
+        return this.postRepository.findAll();
     }
 }

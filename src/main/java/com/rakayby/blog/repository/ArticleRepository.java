@@ -1,15 +1,15 @@
 package com.rakayby.blog.repository;
 
-import com.rakayby.blog.model.Article;
+import com.rakayby.blog.model.Post;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**
  *
  * @author Rakayby
  */
-public interface ArticleRepository extends MongoRepository<Article, Integer> {
+public interface ArticleRepository extends MongoRepository<Post, Integer> {
 
-    public Article findByTitle(String title);
+    public Post findByTitle(String title);
 
-    public Article findByAuthor(String author);
+    public Post findByAuthor(String author);
 }

@@ -1,5 +1,6 @@
 package com.rakayby.blog.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,11 +13,11 @@ import lombok.ToString;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
-public class Article {
+public class Post {
 
     private Integer id;
     private String title;
     private String content;
-    private String author;
 }

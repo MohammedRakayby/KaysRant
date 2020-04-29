@@ -8,7 +8,7 @@ public class ApiEndPoints {
 
     public static class Controllers {
 
-        public static final String ARTICLE_CONTROLLER = "article";
+        public static final String POST_CONTROLLER = "post";
         public static final String USER_CONTROLLER = "user";
     }
 

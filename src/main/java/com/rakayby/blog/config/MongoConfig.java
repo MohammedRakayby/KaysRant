@@ -1,10 +1,7 @@
 package com.rakayby.blog.config;
 
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientOptions;
-import com.mongodb.MongoCredential;
-import com.mongodb.ServerAddress;
-import java.util.Arrays;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -30,14 +27,19 @@ public class MongoConfig {
     private String password;
     private String appName;
     private int port;
+    private String connectionString;
 
     @Bean
     public MongoClient mongo() {
-        MongoCredential mongoCredential = MongoCredential.createCredential(username, dbName, password.toCharArray());
-        MongoClientOptions options = MongoClientOptions.builder().applicationName(appName).build();
-        return new MongoClient(new ServerAddress(host), mongoCredential, options);
+//        MongoCredential mongoCredential = MongoCredential.createCredential(username, dbName, password.toCharArray());
+//        MongoClientOptions options = MongoClientOptions.builder().applicationName(appName).build();
+        return MongoClients.create(connectionString);
+//        return new SimpleMongoClientDbFactory(client);
+//        return new MongoClient(new ServerAddress(host), mongoCredential, options);
+
     }
 
+    @Bean
     public MongoTemplate mongoTemplate() {
         return new MongoTemplate(mongo(), dbName);
     }

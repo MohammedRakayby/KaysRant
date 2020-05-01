@@ -8,11 +8,15 @@ import { catchError, retry } from 'rxjs/operators';
 })
 export class HttpService {
 
+  private host = "http://localhost:8080";
   constructor(private http: HttpClient) { }
   //later
   // handle errors
   getData(url: string, options?) {
     //later: check for options parameter
-    return this.http.get(url);
+    if (options) {
+      return this.http.get(this.host + url, options);
+    }
+    return this.http.get(this.host + url, { headers: { 'Content-Type': 'application/json' } });
   }
 }

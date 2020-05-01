@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpService } from '../services/httpservice/http.service';
+import { Post } from '../models/post.model';
+import { Controllers, Endpoints } from '../defines/api.endpoints';
+
 
 @Component({
   selector: 'app-timeline',
@@ -7,9 +11,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TimelineComponent implements OnInit {
 
-  constructor() { }
+  postsArr: Post[];
+  constructor(private httpService: HttpService) { }
 
   ngOnInit() {
+    this.getAllArticles();
   }
-
+  getAllArticles() {
+    let url = Controllers.post + Endpoints.getAll;
+    this.httpService.getData(url).subscribe((posts: any) => { console.log(posts); this.postsArr = posts });
+    console.log(this.postsArr);
+  }
 }

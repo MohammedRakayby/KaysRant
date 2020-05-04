@@ -1,14 +1,12 @@
 package com.rakayby.blog.db.repository;
 
-import com.rakayby.blog.model.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.stereotype.Repository;
+import com.rakayby.blog.model.User;
 
 /**
  *
- * @author Rakayby
+ * @author Mohammed.Rakayby
  */
-@Repository
-public interface UserRepository extends MongoRepository<User, String> {
-    //any custom methods
+public interface UserRepository extends CustomUserRepository, MongoRepository<User, String> {
+
 }

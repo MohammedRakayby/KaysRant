@@ -8,6 +8,11 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
+/*
+    this implementation will be picked up by spring.
+    even by not explicitly using it, only proper naming
+    is essential for it to work.
+ */
 /**
  *
  * @author Rakayby

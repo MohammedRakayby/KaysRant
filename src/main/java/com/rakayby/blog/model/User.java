@@ -11,7 +11,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-
 /*
         I could have used spring's implementation of user,
         however, it contained much of unwanted data in my case.
@@ -39,8 +38,8 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(!isAdmin ? new SimpleGrantedAuthority(Constants.ROLES.USER)
-                : new SimpleGrantedAuthority(Constants.ROLES.USER), new SimpleGrantedAuthority(Constants.ROLES.ADMIN));
+        return isAdmin ? Arrays.asList(new SimpleGrantedAuthority(Constants.ROLES.USER), new SimpleGrantedAuthority(Constants.ROLES.ADMIN))
+                : Arrays.asList(new SimpleGrantedAuthority(Constants.ROLES.USER));
     }
 
     @Override

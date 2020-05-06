@@ -19,5 +19,6 @@ public class Post {
 
     private Integer id;
     private String title;
+    @ToString.Exclude
     private String content;
 }

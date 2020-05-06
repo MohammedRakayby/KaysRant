@@ -2,7 +2,6 @@ package com.rakayby.blog.db.service;
 
 import com.rakayby.blog.db.repository.UserRepository;
 import com.rakayby.blog.model.User;
-import com.rakayby.blog.util.UserUtils;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,7 +18,6 @@ public class UserService {
     }
     
     public Boolean create(User user) {
-        UserUtils.loadDefaultUserConfig(user);
         return userRepository.insert(user) != null;
     }
     

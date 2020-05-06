@@ -9,6 +9,6 @@ public class DbConstants {
     public static class USER_ATTRIBUTES {
 
         public static final String NAME = "name";
-        public static final String EMAIL = "email";
+        public static final String USERNAME = "username";
     }
 }

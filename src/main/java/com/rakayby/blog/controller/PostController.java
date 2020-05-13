@@ -34,4 +34,9 @@ public class PostController {
     public List<Post> getAll() {
         return this.postFacade.getAll();
     }
+
+    @GetMapping(ApiEndPoints.PostController.EDITOR)
+    public Boolean editorSecurity() {
+        return true;
+    }
 }

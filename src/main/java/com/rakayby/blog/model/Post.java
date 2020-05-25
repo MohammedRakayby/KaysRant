@@ -19,12 +19,13 @@ import lombok.ToString;
 @ToString
 public class Post {
 
-    private Integer id;
+    private Long id;
     private String title;
     @ToString.Exclude
     private String content;
     private String tag;
     private Date date;
     private Integer readTime;
+    @ToString.Exclude
     private String summary;
 }

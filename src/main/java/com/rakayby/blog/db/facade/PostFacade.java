@@ -27,7 +27,7 @@ public class PostFacade {
         return this.postService.getAll();
     }
 
-    public Optional getById(Integer id) {
-        return this.postService.getById(id.toString());
+    public Optional getById(Long id) {
+        return this.postService.getById(id);
     }
 }

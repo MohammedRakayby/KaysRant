@@ -7,19 +7,19 @@ import { HttpClientModule, HTTP_INTERCEPTORS  } from '@angular/common/http';
 import { LoggingInterceptor } from './http-interceptors/logging-interceptor';
 import { EditorComponent } from './editor/editor.component';
 import { AppRoutingModule } from './app-routing.module';
-import { SinglePostComponent } from './timeline/single-post/single-post.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
     AppComponent,
     TimelineComponent,
-    EditorComponent,
-    SinglePostComponent
+    EditorComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FontAwesomeModule
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: LoggingInterceptor, multi: true}],
   bootstrap: [AppComponent]

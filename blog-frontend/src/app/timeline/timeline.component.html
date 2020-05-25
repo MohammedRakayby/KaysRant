@@ -27,8 +27,11 @@
     </div>
     <div>
         <ng-template #viewSingle>
-          <app-single-post></app-single-post>
-            
+            <span (click)="handleBack()">
+                <fa-icon [icon]="faArrowLeft"></fa-icon>
+                {{currentPostInView.title}}
+                {{currentPostInView.content}}
+            </span>
         </ng-template>
     </div>
 </div>

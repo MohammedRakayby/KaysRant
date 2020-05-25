@@ -44,7 +44,7 @@ public class PostController {
     }
 
     @GetMapping(ApiEndPoints.PostController.GET_POST)
-    public ResponseEntity<?> getById(@RequestParam(required = true) Integer id) {
+    public ResponseEntity<?> getById(@RequestParam(required = true) Long id) {
         final Optional post = this.postFacade.getById(id);
         if (post.isPresent()) {
             return ResponseEntity.ok(post.get());

@@ -25,6 +25,7 @@ public class ApiEndPoints {
 
         public static final String GET_ALL = "getAll";
         public static final String EDITOR = "editor";
+        public static final String GET_POST = "getPost";
     }
 
     public static class AuthController {

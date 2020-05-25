@@ -7,12 +7,14 @@ import { HttpClientModule, HTTP_INTERCEPTORS  } from '@angular/common/http';
 import { LoggingInterceptor } from './http-interceptors/logging-interceptor';
 import { EditorComponent } from './editor/editor.component';
 import { AppRoutingModule } from './app-routing.module';
+import { SinglePostComponent } from './timeline/single-post/single-post.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TimelineComponent,
-    EditorComponent
+    EditorComponent,
+    SinglePostComponent
   ],
   imports: [
     BrowserModule,

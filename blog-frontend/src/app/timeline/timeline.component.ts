@@ -11,10 +11,12 @@ import { Controllers, Endpoints } from '../defines/api.endpoints';
 })
 export class TimelineComponent implements OnInit {
 
+  viewAll: boolean;
   postsArr: Post[];
   constructor(private httpService: HttpService) { }
 
   ngOnInit() {
+    this.viewAll = true;
     this.getAllArticles();
   }
   getAllArticles() {
@@ -22,7 +24,7 @@ export class TimelineComponent implements OnInit {
     this.httpService.getData(url).subscribe((posts: any) => { console.log(posts); this.postsArr = posts });
     console.log(this.postsArr);
   }
-  openPost(event) {
-    console.log(event);
+  openPost(id: number) {
+    this.viewAll = false;
   }
 }

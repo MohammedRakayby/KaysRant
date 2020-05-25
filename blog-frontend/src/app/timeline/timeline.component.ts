@@ -18,8 +18,11 @@ export class TimelineComponent implements OnInit {
     this.getAllArticles();
   }
   getAllArticles() {
-    let url = Controllers.post + Endpoints.getAll;
+    let url = Controllers.POST + Endpoints.GET_ALL;
     this.httpService.getData(url).subscribe((posts: any) => { console.log(posts); this.postsArr = posts });
     console.log(this.postsArr);
+  }
+  openPost(event) {
+    console.log(event);
   }
 }

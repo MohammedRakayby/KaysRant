@@ -1,7 +1,10 @@
 export class Controllers {
-    public static post = "/post";
-    public static user = "/user";
+    public static POST = "/post";
+    public static USER = "/user";
+    public static AUTH = "/auth";
 };
 export class Endpoints {
-    public static getAll = "/getAll";
+    public static GET_ALL = "/getAll";
+    public static EDITOR = "/editor";
+    public static LOGIN = "/login";
 }

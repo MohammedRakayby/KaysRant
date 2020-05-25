@@ -1,6 +1,49 @@
-<p>timeline works!</p>
-<div *ngFor="let post of postsArr">
-    <p>title: {{post.title}}</p>
-    <p>content: {{post.content}}</p>
+<!-- <div class="jumbotron">
+    <div class="d-flex justify-content-center" style="min-width: 92vw;">
+      <h1 class="display-4">Kay's Rant</h1>
+    </div>
+  </div> -->
+<!-- <div class="d-flex flex-column">
+    <div class="jumbotron"
+        style="min-height: 50vh; background: url(assets/coffee2.svg) no-repeat center center; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
+        <h1>Hello</h1>
+    </div>
+    <div class="d-flex" *ngFor="let post of postsArr">
+        <p>title: {{post.title}}</p>
+        <p>content: {{post.content}}</p>
+    </div>
+    <div class="d-flex">
+        <a routerLink="/editor" routerLinkActive="active">Editor component</a>
+    </div>
+</div> -->
+<div class="timeline">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="case" *ngFor="let post of postsArr">
+                <!-- <p>title: {{post.title}}</p>
+                <p>content: {{post.content}}</p> -->
+                <!-- </div>
+            <div class="case"> -->
+                <div class="row">
+                    <div class="col-md-6 col-lg-6 col-xl-8 d-flex">
+                        <span class="img w-100 mb-3 mb-md-0" style="background-image: url(assets/coffee.jpg);"></span>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-xl-4 d-flex">
+                        <div class="text w-100 pl-md-3">
+                            <span class="subheading">{{post.tag}}</span>
+                            <h2>{{post.title}}</h2>
+                            <h6>{{post.summary}}</h6>
+                            <!-- <button type="button" class="btn btn-outline-secondary summary-btn">Read More</button> -->
+                            <button type="button" (click)="openPost(post.id)" class="btn btn-secondary btn-lg active">Read More</button>
+                            <div class="meta">
+                                <p class="mb-0">{{post.date | date:'shortDate'}} |
+                                    {{post.readTime}} MINUTES READ</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            </div>
+        </div>
+    </div>
 </div>
-<a routerLink="/editor" routerLinkActive="active">Editor component</a>

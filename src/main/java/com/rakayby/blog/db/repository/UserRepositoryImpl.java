@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 /*
     this implementation will be picked up by spring.
-    even by not explicitly using it, only proper naming
+    even while not explicitly wiring it, only proper naming
     is essential for it to work.
  */
 /**

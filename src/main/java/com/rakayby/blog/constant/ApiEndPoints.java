@@ -29,6 +29,6 @@ public class ApiEndPoints {
 
     public static class AuthController {
 
-        public static final String AUTHENTICATE = "authenticate";
+        public static final String LOGIN = "login";
     }
 }

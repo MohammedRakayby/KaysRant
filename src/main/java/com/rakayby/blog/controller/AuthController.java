@@ -30,8 +30,8 @@ public class AuthController {
     private final UserFacade userFacade;
     private final JwtUtils jwtUtils;
 
-    @PostMapping(ApiEndPoints.AuthController.AUTHENTICATE)
-    public ResponseEntity<?> createAuthToken(@RequestBody AuthRequest request) {
+    @PostMapping(ApiEndPoints.AuthController.LOGIN)
+    public ResponseEntity<?> login(@RequestBody AuthRequest request) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         } catch (BadCredentialsException e) {

@@ -1,0 +1,12 @@
+.timeline {
+  padding: 3em 0;
+  position: relative;
+}
+/* @media (max-width: 767.98px) {
+  .timeline {
+    padding: 6em 0;
+  }
+} */
+.summary-btn {
+  padding: 0.5em 1.5em;
+}

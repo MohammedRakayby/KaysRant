@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Controllers, Endpoints } from '../defines/api.endpoints';
+import { HttpService } from '../services/httpservice/http.service';
 
 @Component({
   selector: 'app-editor',
@@ -7,9 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EditorComponent implements OnInit {
 
-  constructor() { }
+  constructor(private httpService: HttpService) { }
 
   ngOnInit() {
+    this.httpService.login(undefined, undefined);
+    // this.authenticate();
+  }
+  authenticate() {
+    
   }
 
 }

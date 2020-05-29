@@ -9,14 +9,10 @@ import { HttpService } from '../services/httpservice/http.service';
 })
 export class EditorComponent implements OnInit {
 
-  constructor(private httpService: HttpService) { }
+  constructor() { }
 
   ngOnInit() {
-    this.httpService.login(undefined, undefined);
-    // this.authenticate();
   }
-  authenticate() {
-    
-  }
+  
 
 }

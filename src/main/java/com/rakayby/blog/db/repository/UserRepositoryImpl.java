@@ -24,7 +24,7 @@ class UserRepositoryImpl implements CustomUserRepository {
     private final MongoTemplate mongoTemplate;
 
     @Override
-    public User findByUsername(String username) {
+    public User findByUsername(String username){
         return this.mongoTemplate.findOne(Query.query(Criteria.where(DbConstants.USER_ATTRIBUTES.USERNAME).is(username)), User.class);
     }
 

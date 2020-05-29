@@ -2,6 +2,7 @@ package com.rakayby.blog.db.facade;
 
 import com.rakayby.blog.db.service.UserService;
 import com.rakayby.blog.model.User;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Component;
 
 /**
@@ -22,7 +23,7 @@ public class UserFacade {
         return userService.create(user);
     }
 
-    public User loadUserByUsername(String string) {
+    public User loadUserByUsername(String string)  throws BadCredentialsException  {
         return this.userService.loadUserByUsername(string);
     }
 }

@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { User } from 'src/app/models/user.model';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ import { User } from 'src/app/models/user.model';
 export class HttpService {
 
   private host = "http://localhost:8080";
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
   //later
   authenticated = false;
   // handle errors
@@ -24,7 +25,15 @@ export class HttpService {
 
 
   login(email, password) {
-    return this.http.post(this.host + '/auth/login', { "username": email, "password": password });
+    return this.http.post(this.host + '/auth/login', { "username": email, "password": password }).subscribe((res: any) => {
+      debugger;
+      if (res.status == 200) {
+        console.log("User is logged in");
+        this.router.navigateByUrl('/');
+      } else {
+        console.log("login failed");
+      }
+    });;
   }
 
 }

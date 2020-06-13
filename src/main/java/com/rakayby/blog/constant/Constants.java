@@ -14,4 +14,9 @@ public class Constants {
         public static final String ADMIN = "admin";
     }
 
+    public enum UserValidation {
+        INVALID_USERNAME,
+        INVALID_PASSWORD,
+        SUCCESS
+    }
 }

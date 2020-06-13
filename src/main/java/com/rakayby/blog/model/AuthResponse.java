@@ -1,6 +1,7 @@
 package com.rakayby.blog.model;
 
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 /**
  *
@@ -10,32 +11,40 @@ import lombok.Getter;
 public class AuthResponse {
 
     private final String errorMessage;
-    private final Integer httpStatus;
+    private final HttpStatus httpStatus;
     private final String jwt;
+    private final Boolean status;
 
     private AuthResponse(Builder builder) {
         this.errorMessage = builder.errorMessage;
         this.httpStatus = builder.httpStatus;
+        this.status = builder.status;
         this.jwt = builder.jwt;
     }
 
     public static class Builder {
 
         private String errorMessage;
-        private Integer httpStatus;
-        private final String jwt;
+        private HttpStatus httpStatus;
+        private Boolean status;
+        private  String jwt;
 
-        public Builder(String jwt) {
-            this.jwt = jwt;
+        public Builder() {
+      
         }
 
-        public Builder withErrorMessage(String errorMessage) {
+        public Builder withMessage(String errorMessage) {
             this.errorMessage = errorMessage;
             return this;
         }
 
-        public Builder withHttpStatus(Integer httpStatus) {
+        public Builder withHttpStatus(HttpStatus httpStatus) {
             this.httpStatus = httpStatus;
+            return this;
+        }
+
+        public Builder withStatus(Boolean status) {
+            this.status = status;
             return this;
         }
 

@@ -31,5 +31,6 @@ public class ApiEndPoints {
     public static class AuthController {
 
         public static final String LOGIN = "login";
+        public static final String LOGOUT = "logout";
     }
 }

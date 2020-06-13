@@ -5,12 +5,18 @@ import com.rakayby.blog.db.facade.UserFacade;
 import com.rakayby.blog.model.AuthRequest;
 import com.rakayby.blog.model.AuthResponse;
 import com.rakayby.blog.model.User;
+import com.rakayby.blog.util.CookieUtils;
 import com.rakayby.blog.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,23 +30,40 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = ApiEndPoints.Controllers.AUTH_CONTROLLER, consumes = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class AuthController {
-    
+
     private final AuthenticationManager authenticationManager;
     private final UserFacade userFacade;
     private final JwtUtils jwtUtils;
-    
+    private final CookieUtils cookieUtils;
+
     @PostMapping(ApiEndPoints.AuthController.LOGIN)
     public ResponseEntity<?> login(@RequestBody AuthRequest request) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-        } catch (Exception e) {
-            // will be like this for now
-//            return ResponseEntity.ok(new AuthResponse("Invalid username or password ", ""));
-            return ResponseEntity.ok(new AuthResponse.Builder("").withErrorMessage("Invalid username or password").withHttpStatus(403).build());
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.ok(new AuthResponse.Builder()
+                    .withMessage("Invalid username or password")
+                    .withHttpStatus(HttpStatus.FORBIDDEN)
+                    .withStatus(Boolean.FALSE).build());
         }
-        
+
         User user = userFacade.loadUserByUsername(request.getUsername());
         final String jwt = jwtUtils.generateToken(user);
-        return ResponseEntity.ok(new AuthResponse.Builder(jwt).withHttpStatus(200));
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(HttpHeaders.SET_COOKIE, cookieUtils.createAccessTokenCookie(jwt).toString());
+        return ResponseEntity.ok()
+                .headers(httpHeaders)
+                .body(new AuthResponse.Builder()
+                        .withMessage("Authenticated")
+                        .withHttpStatus(HttpStatus.OK)
+                        .withStatus(Boolean.TRUE).build());
+    }
+
+    @GetMapping(value = ApiEndPoints.AuthController.LOGOUT)
+    public ResponseEntity logout() {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        SecurityContextHolder.clearContext();
+        httpHeaders.add(HttpHeaders.SET_COOKIE, cookieUtils.deleteAccessTokenCookie().toString());
+        return ResponseEntity.ok().headers(httpHeaders).body(new AuthResponse.Builder().withMessage("Logout successful").withStatus(Boolean.TRUE).build());
     }
 }

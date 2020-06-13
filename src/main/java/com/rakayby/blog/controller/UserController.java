@@ -1,12 +1,20 @@
 package com.rakayby.blog.controller;
 
 import com.rakayby.blog.constant.ApiEndPoints;
+import com.rakayby.blog.constant.Constants.UserValidation;
 import com.rakayby.blog.db.facade.UserFacade;
+import com.rakayby.blog.model.AuthResponse;
 import com.rakayby.blog.model.User;
-import com.rakayby.blog.util.UserUtils;
+import com.rakayby.blog.util.CookieUtils;
+import com.rakayby.blog.util.JwtUtils;
 import com.rakayby.blog.validators.UserValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,23 +30,38 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = ApiEndPoints.Controllers.USER_CONTROLLER, consumes = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class UserController {
-    //change returns to response entity
+
+    private final JwtUtils jwtUtils;
+    private final CookieUtils cookieUtils;
     private final UserFacade userFacade;
-    private final UserUtils userUtils;
-    
+    private final PasswordEncoder passwordEncoder;
+
     @PostMapping(ApiEndPoints.GenericEndpoints.CREATE)
-    public Boolean create(@RequestBody User user) {
-        //validate
-        //call creation methods
-        if (UserValidator.isValidUser(user)) {
-            userUtils.encodeUserPassword(user);
-            if (userFacade.create(user)) {
-                return true;
+    public ResponseEntity create(@RequestBody User user) {
+
+        UserValidation userValidation = UserValidator.isValidUser(user);
+        if (userValidation == UserValidation.SUCCESS) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            try {
+                userFacade.create(user);
+            } catch (DuplicateKeyException e) {
+                return ResponseEntity.ok().body(new AuthResponse.Builder().withMessage("Failed, User already exists").withStatus(Boolean.FALSE).build());
             }
+            final String jwt = jwtUtils.generateToken(user);
+
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add(HttpHeaders.SET_COOKIE, cookieUtils.createAccessTokenCookie(jwt).toString());
+            return ResponseEntity.ok()
+                    .headers(httpHeaders)
+                    .body(new AuthResponse.Builder().withMessage("Registeration Successful").withHttpStatus(HttpStatus.OK).withStatus(Boolean.TRUE).build());
         }
-        return false;
+        return ResponseEntity.ok()
+                .body(new AuthResponse.Builder().withMessage("Registeration Failed")
+                        .withHttpStatus(HttpStatus.OK)
+                        .withStatus(Boolean.FALSE)
+                        .withMessage("Validation status: " + userValidation.toString()).build());
     }
-    
+
     @GetMapping(ApiEndPoints.GenericEndpoints.GET)
     public User getUser(@RequestParam(required = true) String username) {
         return userFacade.loadUserByUsername(username);

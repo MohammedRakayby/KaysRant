@@ -1,6 +1,7 @@
 package com.rakayby.blog.model;
 
 import com.rakayby.blog.constant.Constants;
+import com.rakayby.blog.constant.Constants.UserValidation;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;

@@ -2,6 +2,7 @@ package com.rakayby.blog.db.facade;
 
 import com.rakayby.blog.db.service.UserService;
 import com.rakayby.blog.model.User;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +20,7 @@ public class UserFacade {
 
     }
 
-    public Boolean create(User user) {
+    public User create(User user) throws DuplicateKeyException{
         return userService.create(user);
     }
 

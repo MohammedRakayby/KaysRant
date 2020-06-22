@@ -10,31 +10,31 @@ import org.springframework.http.HttpStatus;
 @Getter
 public class AuthResponse {
 
-    private final String errorMessage;
+    private final String message;
     private final HttpStatus httpStatus;
-    private final String jwt;
     private final Boolean status;
+    private final Object data;
 
     private AuthResponse(Builder builder) {
-        this.errorMessage = builder.errorMessage;
+        this.message = builder.message;
         this.httpStatus = builder.httpStatus;
         this.status = builder.status;
-        this.jwt = builder.jwt;
+        this.data = builder.data;
     }
 
     public static class Builder {
 
-        private String errorMessage;
+        private String message;
         private HttpStatus httpStatus;
         private Boolean status;
-        private  String jwt;
+        private Object data;
 
         public Builder() {
-      
+
         }
 
-        public Builder withMessage(String errorMessage) {
-            this.errorMessage = errorMessage;
+        public Builder withMessage(String message) {
+            this.message = message;
             return this;
         }
 
@@ -45,6 +45,11 @@ public class AuthResponse {
 
         public Builder withStatus(Boolean status) {
             this.status = status;
+            return this;
+        }
+
+        public Builder withData(Object o) {
+            this.data = o;
             return this;
         }
 

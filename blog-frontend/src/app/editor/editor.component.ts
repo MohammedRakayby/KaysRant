@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Controllers, Endpoints } from '../defines/api.endpoints';
-import { HttpService } from '../services/httpservice/http.service';
 
 @Component({
   selector: 'app-editor',

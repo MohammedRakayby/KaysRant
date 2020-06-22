@@ -1,12 +1,11 @@
 package com.rakayby.blog.controller;
 
 import com.rakayby.blog.constant.ApiEndPoints;
-import com.rakayby.blog.db.facade.UserFacade;
+import com.rakayby.blog.db.service.UserService;
 import com.rakayby.blog.model.AuthRequest;
 import com.rakayby.blog.model.AuthResponse;
 import com.rakayby.blog.model.User;
 import com.rakayby.blog.util.CookieUtils;
-import com.rakayby.blog.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,25 +32,23 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
-    private final UserFacade userFacade;
-    private final JwtUtils jwtUtils;
+    private final UserService userService;
     private final CookieUtils cookieUtils;
 
     @PostMapping(ApiEndPoints.AuthController.LOGIN)
     public ResponseEntity<?> login(@RequestBody AuthRequest request) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-        } catch (BadCredentialsException e) {
+        } catch (BadCredentialsException | InternalAuthenticationServiceException e) {
             return ResponseEntity.ok(new AuthResponse.Builder()
                     .withMessage("Invalid username or password")
                     .withHttpStatus(HttpStatus.FORBIDDEN)
                     .withStatus(Boolean.FALSE).build());
         }
 
-        User user = userFacade.loadUserByUsername(request.getUsername());
-        final String jwt = jwtUtils.generateToken(user);
+        User user = userService.loadUserByUsername(request.getUsername());
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(HttpHeaders.SET_COOKIE, cookieUtils.createAccessTokenCookie(jwt).toString());
+        httpHeaders.add(HttpHeaders.SET_COOKIE, cookieUtils.createAccessTokenCookie(user).toString());
         return ResponseEntity.ok()
                 .headers(httpHeaders)
                 .body(new AuthResponse.Builder()

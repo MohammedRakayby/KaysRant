@@ -1,15 +1,12 @@
 package com.rakayby.blog.model;
 
 import com.rakayby.blog.constant.Constants;
-import com.rakayby.blog.constant.Constants.UserValidation;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,7 +26,7 @@ public class User implements UserDetails {
     private String password;
     private String firstName;
     private String lastName;
-    private boolean isAdmin;
+    private boolean isAdmin = false;
     private Date creationDate;
 
     @Override

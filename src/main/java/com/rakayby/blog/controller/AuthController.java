@@ -4,7 +4,6 @@ import com.rakayby.blog.constant.ApiEndPoints;
 import com.rakayby.blog.db.service.UserService;
 import com.rakayby.blog.model.AuthRequest;
 import com.rakayby.blog.model.AuthResponse;
-import com.rakayby.blog.model.User;
 import com.rakayby.blog.util.CookieUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -32,23 +31,27 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
-    private final UserService userService;
     private final CookieUtils cookieUtils;
 
     @PostMapping(ApiEndPoints.AuthController.LOGIN)
     public ResponseEntity<?> login(@RequestBody AuthRequest request) {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(
+                    authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()))
+            );
         } catch (BadCredentialsException | InternalAuthenticationServiceException e) {
-            return ResponseEntity.ok(new AuthResponse.Builder()
-                    .withMessage("Invalid username or password")
-                    .withHttpStatus(HttpStatus.FORBIDDEN)
-                    .withStatus(Boolean.FALSE).build());
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add(HttpHeaders.SET_COOKIE, cookieUtils.deleteAccessTokenCookie().toString());
+            return ResponseEntity.ok()
+                    .headers(httpHeaders)
+                    .body(new AuthResponse.Builder()
+                            .withMessage("Invalid username or password")
+                            .withHttpStatus(HttpStatus.FORBIDDEN)
+                            .withStatus(Boolean.FALSE).build());
         }
-
-        User user = userService.loadUserByUsername(request.getUsername());
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(HttpHeaders.SET_COOKIE, cookieUtils.createAccessTokenCookie(user).toString());
+        final String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        final HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(HttpHeaders.SET_COOKIE, cookieUtils.createAccessTokenCookie(username).toString());
         return ResponseEntity.ok()
                 .headers(httpHeaders)
                 .body(new AuthResponse.Builder()
@@ -59,7 +62,7 @@ public class AuthController {
 
     @GetMapping(value = ApiEndPoints.AuthController.LOGOUT)
     public ResponseEntity logout() {
-        HttpHeaders httpHeaders = new HttpHeaders();
+        final HttpHeaders httpHeaders = new HttpHeaders();
         SecurityContextHolder.clearContext();
         httpHeaders.add(HttpHeaders.SET_COOKIE, cookieUtils.deleteAccessTokenCookie().toString());
         return ResponseEntity.ok().headers(httpHeaders).body(new AuthResponse.Builder().withMessage("Logout successful").withStatus(Boolean.TRUE).build());

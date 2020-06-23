@@ -17,8 +17,8 @@ public class CookieUtils {
 
     private final JwtUtils jwtUtils;
 
-    public HttpCookie createAccessTokenCookie(User user) {
-        final String jwt = jwtUtils.generateToken(user);
+    public HttpCookie createAccessTokenCookie(String username) {
+        final String jwt = jwtUtils.generateToken(username);
         return ResponseCookie.from("jwt", jwt)
                 .maxAge(Duration.ofHours(4))
                 .httpOnly(true)

@@ -48,8 +48,8 @@ public class UserController {
                 return ResponseEntity.ok().body(new AuthResponse.Builder().withMessage("Failed, User already exists").withStatus(Boolean.FALSE).build());
             }
 
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.add(HttpHeaders.SET_COOKIE, cookieUtils.createAccessTokenCookie(user).toString());
+            final HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add(HttpHeaders.SET_COOKIE, cookieUtils.createAccessTokenCookie(user.getUsername()).toString());
             return ResponseEntity.ok()
                     .headers(httpHeaders)
                     .body(new AuthResponse.Builder().withMessage("Registeration Successful").withHttpStatus(HttpStatus.OK).withStatus(Boolean.TRUE).build());
@@ -63,11 +63,11 @@ public class UserController {
 
     @GetMapping(value = ApiEndPoints.GenericEndpoints.GET)
     public ResponseEntity getUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth.getName().equals("anonymousUser")) {
             return ResponseEntity.ok().body(new AuthResponse.Builder().withMessage("User is not logged").withStatus(Boolean.FALSE).build());
         }
-        User user = userService.loadUserByUsername(auth.getName());
+        final User user = userService.loadUserByUsername(auth.getName());
         return ResponseEntity.ok().body(new AuthResponse.Builder()
                 .withMessage("Logged in")
                 .withStatus(Boolean.TRUE)

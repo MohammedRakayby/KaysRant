@@ -1,12 +1,11 @@
-.timeline {
-  padding: 3em 0;
-  position: relative;
+.main-flex {
+  /* align-content: center; */
 }
-/* @media (max-width: 767.98px) {
-  .timeline {
-    padding: 6em 0;
-  }
-} */
-.summary-btn {
-  padding: 0.5em 1.5em;
+.post {
+  flex: 1 1 400px;
+  max-width: 70vw;
 }
+.mat-card-content,.mat-card-subtitle {
+  font-family: "Cairo", sans-serif;
+}
+

@@ -1,41 +1,23 @@
-<div class="timeline">
-    <div *ngIf="viewAll; else viewSingle" class="row">
-        <div class="col-md-12">
-            <div class="case" *ngFor="let post of postsArr">
-
-                <div class="row">
-                    <div class="col-md-6 col-lg-6 col-xl-8 d-flex">
-                        <span class="img w-100 mb-3 mb-md-0" style="background-image: url(assets/coffee.jpg);"></span>
-                    </div>
-                    <div class="col-md-6 col-lg-6 col-xl-4 d-flex">
-                        <div class="text w-100 pl-md-3">
-                            <span class="subheading">{{post.tag}}</span>
-                            <h2>{{post.title}}</h2>
-                            <h6>{{post.summary}}</h6>
-                            <button type="button" (click)="openPost(post.id)"
-                                class="btn btn-secondary btn-lg active">Read More</button>
-                            <div class="meta">
-                                <p class="mb-0">{{post.date | date:'shortDate'}} |
-                                    {{post.readTime}} MINUTES READ</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <hr>
-            </div>
-        </div>
-    </div>
-    <div>
-        <ng-template #viewSingle>
-            <span (click)="handleBack()">
-                <fa-icon [icon]="faArrowLeft"></fa-icon>
-                {{currentPostInView.title}}
-                {{currentPostInView.content}}
-            </span>
-        </ng-template>
-    </div>
+<div class="d-flex justify-content-center flex-wrap main-flex">
+    <mat-card *ngFor="let post of postsArr" class="post m-4">
+        <mat-card-header>
+            <!-- <div mat-card-avatar class="example-header-image"></div> -->
+            <mat-card-title>{{post.title}}</mat-card-title>
+            <mat-card-subtitle>{{post.tag}}</mat-card-subtitle>
+        </mat-card-header>
+        <img mat-card-image src="https://cdn.pixabay.com/photo/2016/03/26/13/09/cup-of-coffee-1280537_960_720.jpg"
+            alt="Photo">
+        <mat-card-content>
+            <p>
+                {{post.summary}}
+            </p>
+        </mat-card-content>
+        <mat-card-actions >
+            <button mat-button>Read More</button>
+        </mat-card-actions>
+        <mat-card-footer>
+            <p> {{post.date | date:'shortDate'}} |
+                {{post.readTime}} MINUTES READ</p>
+        </mat-card-footer>
+    </mat-card>
 </div>
-
-<!-- <div class="d-flex">
-    <a routerLink="/editor" routerLinkActive="active">Editor component</a>
-</div> -->

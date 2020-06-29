@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ResponseModel } from '../models/response.model';
+import { UserService } from '../services/userservice/user.service';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +12,10 @@ import { ResponseModel } from '../models/response.model';
 })
 export class LoginComponent implements OnInit {
   form: FormGroup;
-  constructor(private httpClient: HttpClient, private fb: FormBuilder, private router: Router) {
+  constructor(private httpClient: HttpClient,
+    private fb: FormBuilder,
+    private router: Router,
+    private userService: UserService) {
     this.form = this.fb.group({
       email: ['', Validators.required],
       password: ['', Validators.required]
@@ -29,7 +33,7 @@ export class LoginComponent implements OnInit {
         debugger;
         if (res.status) {
           console.log("User is logged in");
-          // this.httpClient.get(); get user data and update state
+          this.userService.state=res.data;
           this.router.navigateByUrl('/');
         } else {
           console.log("login failed " + res.message);

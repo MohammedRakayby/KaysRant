@@ -2,6 +2,8 @@ package com.rakayby.blog.db.service;
 
 import com.rakayby.blog.db.repository.UserRepository;
 import com.rakayby.blog.model.User;
+import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,13 +14,10 @@ import org.springframework.stereotype.Service;
  * @author Rakayby
  */
 @Service
+@RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
-
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     public User create(User user) throws DuplicateKeyException {
         try {
@@ -30,10 +29,11 @@ public class UserService implements UserDetailsService {
 
     @Override
     public User loadUserByUsername(String username) throws BadCredentialsException {
-        final User user = userRepository.findByUsername(username);
-        if (user == null) {
-            throw new BadCredentialsException("Wrong username or password");
+
+        final Optional<User> user = userRepository.findById(username);
+        if (user.isPresent()) {
+            return user.get();
         }
-        return user;
+        throw new BadCredentialsException("Wrong username or password");
     }
 }

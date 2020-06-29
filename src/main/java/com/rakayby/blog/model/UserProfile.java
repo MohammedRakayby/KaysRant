@@ -24,7 +24,7 @@ public class UserProfile {
         this.userName = user.getUsername();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
-        this.role = user.getAuthorities().toString();
+        this.role = user.getAuthorities().iterator().next().getAuthority();
         this.creationDate = user.getCreationDate();
     }
 }

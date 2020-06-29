@@ -1,6 +1,8 @@
 package com.rakayby.blog.db.repository;
 
 import com.rakayby.blog.model.User;
+import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -8,5 +10,8 @@ import com.rakayby.blog.model.User;
  */
 public interface CustomUserRepository {
 
-    User findByUsername(String username);
+    User findByCreationDate(Date creationDate);
+
+    List<User> findAdminUsers();
+
 }

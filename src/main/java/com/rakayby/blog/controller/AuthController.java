@@ -4,6 +4,8 @@ import com.rakayby.blog.constant.ApiEndPoints;
 import com.rakayby.blog.db.service.UserService;
 import com.rakayby.blog.model.AuthRequest;
 import com.rakayby.blog.model.AuthResponse;
+import com.rakayby.blog.model.User;
+import com.rakayby.blog.model.UserProfile;
 import com.rakayby.blog.util.CookieUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -49,14 +51,15 @@ public class AuthController {
                             .withHttpStatus(HttpStatus.FORBIDDEN)
                             .withStatus(Boolean.FALSE).build());
         }
-        final String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        final UserProfile userProfile = new UserProfile((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         final HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(HttpHeaders.SET_COOKIE, cookieUtils.createAccessTokenCookie(username).toString());
+        httpHeaders.add(HttpHeaders.SET_COOKIE, cookieUtils.createAccessTokenCookie(userProfile.getUserName()).toString());
         return ResponseEntity.ok()
                 .headers(httpHeaders)
                 .body(new AuthResponse.Builder()
                         .withMessage("Authenticated")
                         .withHttpStatus(HttpStatus.OK)
+                        .withData(userProfile)
                         .withStatus(Boolean.TRUE).build());
     }
 

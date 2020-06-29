@@ -1,11 +1,10 @@
 package com.rakayby.blog.db.repository;
 
-import com.rakayby.blog.constant.DbConstants;
 import com.rakayby.blog.model.User;
+import java.util.Date;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 /*
@@ -23,9 +22,18 @@ class UserRepositoryImpl implements CustomUserRepository {
 
     private final MongoTemplate mongoTemplate;
 
+//    @Override
+//    public User findByUsername(String username){
+//        return this.mongoTemplate.findOne(Query.query(Criteria.where(DbConstants.USER_ATTRIBUTES.USERNAME).is(username)), User.class);
+//    }
     @Override
-    public User findByUsername(String username){
-        return this.mongoTemplate.findOne(Query.query(Criteria.where(DbConstants.USER_ATTRIBUTES.USERNAME).is(username)), User.class);
+    public User findByCreationDate(Date creationDate) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<User> findAdminUsers() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

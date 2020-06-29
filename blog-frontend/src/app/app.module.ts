@@ -13,13 +13,17 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button'
+import { MatDialogModule } from '@angular/material/dialog';
+import { QuillModule } from 'ngx-quill';
+import { PreviewComponent } from './editor/preview/preview.component'
 
 @NgModule({
   declarations: [
     AppComponent,
     TimelineComponent,
     EditorComponent,
-    LoginComponent
+    LoginComponent,
+    PreviewComponent
   ],
   imports: [
     BrowserModule,
@@ -30,7 +34,12 @@ import { MatButtonModule } from '@angular/material/button'
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MatCardModule,
-    MatButtonModule
+    MatButtonModule,
+    MatDialogModule,
+    QuillModule.forRoot()
+  ],
+  entryComponents: [
+    PreviewComponent
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: LoggingInterceptor, multi: true }],
   bootstrap: [AppComponent]

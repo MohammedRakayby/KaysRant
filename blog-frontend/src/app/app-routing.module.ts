@@ -4,12 +4,14 @@ import { Routes, RouterModule } from '@angular/router';
 import { TimelineComponent } from './timeline/timeline.component'
 import { EditorComponent } from './editor/editor.component'
 import { LoginComponent } from './login/login.component';
+import { LoggedAdminGuard } from './guards/logged-admin.guard';
+import { AnonymousGuard } from './guards/anonymous.guard';
 
 const routes: Routes = [
 
   { path: 'timeline', component: TimelineComponent },
-  { path: 'editor', component: EditorComponent },
-  { path: 'login', component: LoginComponent },
+  { path: 'editor', component: EditorComponent, canActivate: [LoggedAdminGuard] },
+  { path: 'login', component: LoginComponent, canActivate: [AnonymousGuard] },
   { path: '', redirectTo: '/timeline', pathMatch: 'full' },
   { path: '**', component: TimelineComponent }
 ];

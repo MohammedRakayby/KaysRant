@@ -1,7 +1,8 @@
 export class User {
-    username: string;
-    firstName:string;
-    lastName:string;
-    creationDate:Date;
-    isAdmin:boolean;
+    constructor() { this.userName = '', this.role = 'user' }
+    userName: string;
+    firstName: string;
+    lastName: string;
+    creationDate: Date;
+    role: String;
 }

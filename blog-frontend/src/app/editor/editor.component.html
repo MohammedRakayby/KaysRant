@@ -2,13 +2,11 @@
     <h3>Editor</h3>
     <form [formGroup]="editorForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
-            <quill-editor [styles]="editorStyle" (onContentChanged)="count($event)" formControlName="editor"></quill-editor>
+            <quill-editor  format="json" [styles]="editorStyle" (onContentChanged)="count($event)" formControlName="editor"></quill-editor>
         <span *ngIf="counter>0">{{counter}}</span>
         </div>
         <button mat-raised-button color="primary" class="m-1">Submit</button>
         <button mat-raised-button color="warn" class="m-1" (click)="preview()">Preview</button>
     </form>
-</div>
-
-  
+</div>  
 <a routerLink="/timeline" routerLinkActive="active">timeLine component</a>

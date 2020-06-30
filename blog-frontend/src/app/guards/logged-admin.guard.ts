@@ -13,7 +13,6 @@ export class LoggedAdminGuard implements CanActivate {
     state: RouterStateSnapshot): boolean {
     let status: boolean = false;
     if (this.userService.isLoggedIn) {
-      debugger;
       let user: User = this.userService.state;
       if (user.userName.length > 0 && user.role === 'admin') {
         status = true;

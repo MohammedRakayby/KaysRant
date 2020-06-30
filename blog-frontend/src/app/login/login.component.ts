@@ -30,7 +30,6 @@ export class LoginComponent implements OnInit {
     const url = "http://localhost:8080/auth/login";
     if (val.email && val.password) {
       this.httpClient.post<ResponseModel>(url, { "username": val.email, "password": val.password }).subscribe((res) => {
-        debugger;
         if (res.status) {
           console.log("User is logged in");
           this.userService.state=res.data;

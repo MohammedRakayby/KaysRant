@@ -24,8 +24,8 @@ public class ApiEndPoints {
     public static class PostController {
 
         public static final String GET_ALL = "getAll";
-        public static final String EDITOR = "editor";
-        public static final String GET_POST = "getPost";
+        public static final String GET_POST_BY_ID = "getById";
+        public static final String GET_POST_BY_SLUG = "getBySlug";
     }
 
     public static class AuthController {

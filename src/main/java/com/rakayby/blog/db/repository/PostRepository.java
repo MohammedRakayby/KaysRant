@@ -7,6 +7,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  *
  * @author mohammed.rakayby
  */
-public interface PostRepository extends MongoRepository<Post, Long> {
+public interface PostRepository extends CustomPostRepository, MongoRepository<Post, Long> {
 
 }

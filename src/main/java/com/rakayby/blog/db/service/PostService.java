@@ -28,4 +28,8 @@ public class PostService {
     public Optional getById(Long id) {
         return this.postRepository.findById(id);
     }
+
+    public Optional getBySlug(String slug) {
+        return this.postRepository.findPostBySlug(slug);
+    }
 }

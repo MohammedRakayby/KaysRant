@@ -1,5 +1,6 @@
-package com.rakayby.blog.db.repository;
+package com.rakayby.blog.db.repository.impl;
 
+import com.rakayby.blog.db.repository.CustomUserRepository;
 import com.rakayby.blog.model.User;
 import java.util.Date;
 import java.util.List;

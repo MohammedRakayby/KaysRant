@@ -8,14 +8,14 @@ import org.springframework.http.HttpStatus;
  * @author Mohammed.Rakayby
  */
 @Getter
-public class AuthResponse {
+public class Response {
 
     private final String message;
     private final HttpStatus httpStatus;
     private final Boolean status;
     private final Object data;
 
-    private AuthResponse(Builder builder) {
+    private Response(Builder builder) {
         this.message = builder.message;
         this.httpStatus = builder.httpStatus;
         this.status = builder.status;
@@ -53,8 +53,8 @@ public class AuthResponse {
             return this;
         }
 
-        public AuthResponse build() {
-            AuthResponse authResponse = new AuthResponse(this);
+        public Response build() {
+            Response authResponse = new Response(this);
             return authResponse;
         }
     }

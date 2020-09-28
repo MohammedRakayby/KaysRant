@@ -3,7 +3,7 @@ package com.rakayby.blog.controller;
 import com.rakayby.blog.constant.ApiEndPoints;
 import com.rakayby.blog.db.service.UserService;
 import com.rakayby.blog.model.AuthRequest;
-import com.rakayby.blog.model.AuthResponse;
+import com.rakayby.blog.model.Response;
 import com.rakayby.blog.model.User;
 import com.rakayby.blog.model.UserProfile;
 import com.rakayby.blog.util.CookieUtils;
@@ -46,7 +46,7 @@ public class AuthController {
             httpHeaders.add(HttpHeaders.SET_COOKIE, cookieUtils.deleteAccessTokenCookie().toString());
             return ResponseEntity.ok()
                     .headers(httpHeaders)
-                    .body(new AuthResponse.Builder()
+                    .body(new Response.Builder()
                             .withMessage("Invalid username or password")
                             .withHttpStatus(HttpStatus.FORBIDDEN)
                             .withStatus(Boolean.FALSE).build());
@@ -56,7 +56,7 @@ public class AuthController {
         httpHeaders.add(HttpHeaders.SET_COOKIE, cookieUtils.createAccessTokenCookie(userProfile.getUserName()).toString());
         return ResponseEntity.ok()
                 .headers(httpHeaders)
-                .body(new AuthResponse.Builder()
+                .body(new Response.Builder()
                         .withMessage("Authenticated")
                         .withHttpStatus(HttpStatus.OK)
                         .withData(userProfile)
@@ -68,6 +68,6 @@ public class AuthController {
         final HttpHeaders httpHeaders = new HttpHeaders();
         SecurityContextHolder.clearContext();
         httpHeaders.add(HttpHeaders.SET_COOKIE, cookieUtils.deleteAccessTokenCookie().toString());
-        return ResponseEntity.ok().headers(httpHeaders).body(new AuthResponse.Builder().withMessage("Logout successful").withStatus(Boolean.TRUE).build());
+        return ResponseEntity.ok().headers(httpHeaders).body(new Response.Builder().withMessage("Logout successful").withStatus(Boolean.TRUE).build());
     }
 }

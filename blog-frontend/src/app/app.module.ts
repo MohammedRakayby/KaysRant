@@ -15,7 +15,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button'
 import { MatDialogModule } from '@angular/material/dialog';
 import { QuillModule } from 'ngx-quill';
-import { PreviewComponent } from './editor/preview/preview.component'
+import { PreviewComponent } from './editor/preview/preview.component';
+import { SinglepostComponent } from './singlepost/singlepost.component'
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { PreviewComponent } from './editor/preview/preview.component'
     TimelineComponent,
     EditorComponent,
     LoginComponent,
-    PreviewComponent
+    PreviewComponent,
+    SinglepostComponent
   ],
   imports: [
     BrowserModule,

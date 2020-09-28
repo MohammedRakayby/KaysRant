@@ -13,6 +13,7 @@ import lombok.Setter;
 public class Post {
 
     private Long id;
+    private String slug;
     private String title;
     private String content;
     private String tag;

@@ -3,6 +3,7 @@ package com.rakayby.blog.controller;
 import com.rakayby.blog.constant.ApiEndPoints;
 import com.rakayby.blog.db.service.PostService;
 import com.rakayby.blog.model.Post;
+import com.rakayby.blog.model.Response;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -35,17 +36,33 @@ public class PostController {
         return this.postService.getAll();
     }
 
-    @GetMapping(ApiEndPoints.PostController.EDITOR)
-    public Boolean editorSecurity() {
-        return true;
-    }
-
-    @GetMapping(ApiEndPoints.PostController.GET_POST)
+    @GetMapping(ApiEndPoints.PostController.GET_POST_BY_ID)
     public ResponseEntity<?> getById(@RequestParam(required = true) Long id) {
         final Optional post = this.postService.getById(id);
         if (post.isPresent()) {
-            return ResponseEntity.ok(post.get());
+            return ResponseEntity.ok().body(new Response.Builder()
+                    .withData(post)
+                    .withMessage("Post Retrieved Successfully")
+                    .withStatus(Boolean.TRUE));
         }
-        return ResponseEntity.ok("Not found");
+        return ResponseEntity.ok().body(new Response.Builder()
+                .withMessage("Post With id" + id + " not found")
+                .withStatus(Boolean.FALSE));
+    }
+
+    @GetMapping(ApiEndPoints.PostController.GET_POST_BY_SLUG)
+    public ResponseEntity<?> getBySlug(@RequestParam(required = true) String slug) {
+        final Optional<Post> post = this.postService.getBySlug(slug);
+        if (post.isPresent()) {
+            return ResponseEntity.ok().body(new Response.Builder()
+                    .withData(post.get())
+                    .withMessage("Found post with id" + post.map(Post::getId))
+                    .withStatus(Boolean.TRUE)
+                    .build());
+        }
+        return ResponseEntity.ok().body(new Response.Builder()
+                .withMessage("Failed to find post")
+                .withStatus(Boolean.FALSE)
+                .build());
     }
 }

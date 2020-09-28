@@ -11,4 +11,9 @@ public class DbConstants {
         public static final String NAME = "name";
         public static final String USERNAME = "username";
     }
+
+    public static class POST_ATTRIBUTES {
+
+        public static final String SLUG = "slug";
+    }
 }

@@ -19,16 +19,16 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    public User create(User user) throws DuplicateKeyException {
+    public User create(User user) {
         try {
-            return this.userRepository.insert(user);
+            return this.userRepository.save(user);
         } catch (DuplicateKeyException e) {
             throw e;
         }
     }
 
     @Override
-    public User loadUserByUsername(String username) throws BadCredentialsException {
+    public User loadUserByUsername(String username) {
 
         final Optional<User> user = userRepository.findById(username);
         if (user.isPresent()) {

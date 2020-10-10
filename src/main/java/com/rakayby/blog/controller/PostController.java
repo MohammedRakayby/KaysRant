@@ -4,6 +4,8 @@ import com.rakayby.blog.constant.ApiEndPoints;
 import com.rakayby.blog.db.service.PostService;
 import com.rakayby.blog.model.Post;
 import com.rakayby.blog.model.Response;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +35,12 @@ public class PostController {
 
     @GetMapping(ApiEndPoints.PostController.GET_ALL)
     public List<Post> getAll() {
-        return this.postService.getAll();
+        Iterator<Post> iterator = this.postService.getAll();
+        ArrayList<Post> posts = new ArrayList();
+        while (iterator.hasNext()) {
+            posts.add(iterator.next());
+        }
+        return posts;
     }
 
     @GetMapping(ApiEndPoints.PostController.GET_POST_BY_ID)
@@ -50,19 +57,19 @@ public class PostController {
                 .withStatus(Boolean.FALSE));
     }
 
-    @GetMapping(ApiEndPoints.PostController.GET_POST_BY_SLUG)
-    public ResponseEntity<?> getBySlug(@RequestParam(required = true) String slug) {
-        final Optional<Post> post = this.postService.getBySlug(slug);
-        if (post.isPresent()) {
-            return ResponseEntity.ok().body(new Response.Builder()
-                    .withData(post.get())
-                    .withMessage("Found post with id" + post.map(Post::getId))
-                    .withStatus(Boolean.TRUE)
-                    .build());
-        }
-        return ResponseEntity.ok().body(new Response.Builder()
-                .withMessage("Failed to find post")
-                .withStatus(Boolean.FALSE)
-                .build());
-    }
+//    @GetMapping(ApiEndPoints.PostController.GET_POST_BY_SLUG)
+//    public ResponseEntity<?> getBySlug(@RequestParam(required = true) String slug) {
+//        final Optional<Post> post = this.postService.getBySlug(slug);
+//        if (post.isPresent()) {
+//            return ResponseEntity.ok().body(new Response.Builder()
+//                    .withData(post.get())
+//                    .withMessage("Found post with id" + post.map(Post::getId))
+//                    .withStatus(Boolean.TRUE)
+//                    .build());
+//        }
+//        return ResponseEntity.ok().body(new Response.Builder()
+//                .withMessage("Failed to find post")
+//                .withStatus(Boolean.FALSE)
+//                .build());
+//    }
 }

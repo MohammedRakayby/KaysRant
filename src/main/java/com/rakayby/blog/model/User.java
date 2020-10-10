@@ -1,5 +1,7 @@
 package com.rakayby.blog.model;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.rakayby.blog.constant.Constants;
 import java.util.Arrays;
 import java.util.Collection;
@@ -7,7 +9,6 @@ import java.util.Date;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,9 +20,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Setter
 @Getter
 @NoArgsConstructor
+@DynamoDBTable(tableName = "Users")
 public class User implements UserDetails {
 
-    @Id
+    @DynamoDBHashKey
     private String username;
     private String password;
     private String firstName;

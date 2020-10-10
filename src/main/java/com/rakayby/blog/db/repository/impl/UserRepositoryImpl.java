@@ -5,7 +5,6 @@ import com.rakayby.blog.model.User;
 import java.util.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Repository;
 
 /*
@@ -20,8 +19,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 class UserRepositoryImpl implements CustomUserRepository {
-
-    private final MongoTemplate mongoTemplate;
 
 //    @Override
 //    public User findByUsername(String username){

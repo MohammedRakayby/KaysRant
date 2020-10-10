@@ -1,7 +1,6 @@
 package com.rakayby.blog.controller;
 
 import com.rakayby.blog.constant.ApiEndPoints;
-import com.rakayby.blog.db.service.UserService;
 import com.rakayby.blog.model.AuthRequest;
 import com.rakayby.blog.model.Response;
 import com.rakayby.blog.model.User;

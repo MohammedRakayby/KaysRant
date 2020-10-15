@@ -1,6 +1,5 @@
 package com.rakayby.blog.util;
 
-import com.rakayby.blog.model.User;
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpCookie;

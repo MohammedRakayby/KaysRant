@@ -1,6 +1,5 @@
 package com.rakayby.blog.util;
 
-import com.rakayby.blog.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -56,8 +55,8 @@ public class JwtUtils {
         return extractExpirationDate(token).before(new Date());
     }
 
-    public Boolean validateToken(String token, User user) {
+    public Boolean validateToken(String token, String username) {
         final String usernameFromToken = extractUsername(token);
-        return (usernameFromToken.equals(user.getUsername()) && !isTokenExpired(token));
+        return (usernameFromToken.equals(username) && !isTokenExpired(token));
     }
 }

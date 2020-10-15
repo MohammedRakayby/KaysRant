@@ -3,9 +3,9 @@ package com.rakayby.blog.controller;
 import com.rakayby.blog.constant.ApiEndPoints;
 import com.rakayby.blog.model.AuthRequest;
 import com.rakayby.blog.model.Response;
-import com.rakayby.blog.model.User;
-import com.rakayby.blog.model.UserProfile;
+import com.rakayby.blog.model.UserDTO;
 import com.rakayby.blog.util.CookieUtils;
+import com.rakayby.blog.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -16,6 +16,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
+    private final UserUtils userUtils;
     private final CookieUtils cookieUtils;
 
     @PostMapping(ApiEndPoints.AuthController.LOGIN)
@@ -50,15 +52,15 @@ public class AuthController {
                             .withHttpStatus(HttpStatus.FORBIDDEN)
                             .withStatus(Boolean.FALSE).build());
         }
-        final UserProfile userProfile = new UserProfile((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        final UserDTO userDto = userUtils.createDTOFromUser((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         final HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(HttpHeaders.SET_COOKIE, cookieUtils.createAccessTokenCookie(userProfile.getUserName()).toString());
+        httpHeaders.add(HttpHeaders.SET_COOKIE, cookieUtils.createAccessTokenCookie(userDto.getUsername()).toString());
         return ResponseEntity.ok()
                 .headers(httpHeaders)
                 .body(new Response.Builder()
                         .withMessage("Authenticated")
                         .withHttpStatus(HttpStatus.OK)
-                        .withData(userProfile)
+                        .withData(userDto)
                         .withStatus(Boolean.TRUE).build());
     }
 

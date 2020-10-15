@@ -1,7 +1,6 @@
 package com.rakayby.blog.filters;
 
 import com.rakayby.blog.db.service.UserService;
-import com.rakayby.blog.model.User;
 import com.rakayby.blog.util.JwtUtils;
 import io.jsonwebtoken.security.SignatureException;
 import java.io.IOException;
@@ -13,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -46,7 +46,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                     }
                     if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                         User user = userService.loadUserByUsername(userName);
-                        if (jwtUtils.validateToken(jwt, user)) {
+                        if (jwtUtils.validateToken(jwt, user.getUsername())) {
                             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                             token.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                             SecurityContextHolder.getContext().setAuthentication(token);

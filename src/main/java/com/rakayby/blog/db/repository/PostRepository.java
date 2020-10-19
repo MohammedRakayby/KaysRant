@@ -1,12 +1,15 @@
 package com.rakayby.blog.db.repository;
 
 import com.rakayby.blog.model.Post;
-import org.springframework.data.repository.CrudRepository;
+import java.util.List;
 
 /**
  *
  * @author mohammed.rakayby
  */
-public interface PostRepository extends CrudRepository<Post, Long> {
-
+public interface PostRepository {
+    public Post save(Post p);
+    public Post getById(String id);
+    public List<Post> getAll();
+    public List<Post> getByTag(String tag);
 }

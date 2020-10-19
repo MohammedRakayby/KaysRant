@@ -1,7 +1,7 @@
 package com.rakayby.blog.util;
 
 import com.rakayby.blog.constant.Constants;
-import com.rakayby.blog.model.UserDTO;
+import com.rakayby.blog.model.UserProfile;
 import java.util.Arrays;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserUtils {
 
-    public User createUserFromDTO(UserDTO profile) {
+    public User createUserFromProfile(UserProfile profile) {
         return new User(profile.getUsername(),
                 profile.getPassword(),
                 true,
@@ -24,11 +24,11 @@ public class UserUtils {
                 Arrays.asList(new SimpleGrantedAuthority(Constants.ROLES.ADMIN)));
     }
 
-    public UserDTO createDTOFromUser(User user) {
-        final UserDTO dto=new UserDTO();
-        dto.setPassword(user.getPassword());
-        dto.setUsername(user.getUsername());
-        return dto;
+    public UserProfile createProfileFromUser(User user) {
+        final UserProfile profile=new UserProfile();
+        profile.setPassword(user.getPassword());
+        profile.setUsername(user.getUsername());
+        return profile;
     }
 
 }

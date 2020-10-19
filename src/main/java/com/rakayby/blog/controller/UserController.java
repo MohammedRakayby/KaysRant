@@ -3,10 +3,9 @@ package com.rakayby.blog.controller;
 import com.rakayby.blog.constant.ApiEndPoints;
 import com.rakayby.blog.db.service.UserService;
 import com.rakayby.blog.model.Response;
-import com.rakayby.blog.model.UserDTO;
+import com.rakayby.blog.model.UserProfile;
 import com.rakayby.blog.util.CookieUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -35,12 +34,12 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping(ApiEndPoints.GenericEndpoints.CREATE)
-    public ResponseEntity create(@RequestBody UserDTO user) {
+    public ResponseEntity create(@RequestBody UserProfile user) {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         try {
             userService.create(user);
-        } catch (DuplicateKeyException e) {
+        } catch (Exception e) {
             return ResponseEntity.ok().body(new Response.Builder().withMessage("Failed, User already exists").withStatus(Boolean.FALSE).build());
         }
 

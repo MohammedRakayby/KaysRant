@@ -35,18 +35,15 @@ public class PostController {
 
     @GetMapping(ApiEndPoints.PostController.GET_ALL)
     public List<Post> getAll() {
-        Iterator<Post> iterator = this.postService.getAll();
-        ArrayList<Post> posts = new ArrayList();
-        while (iterator.hasNext()) {
-            posts.add(iterator.next());
-        }
+        List<Post> posts = this.postService.getAll();
+
         return posts;
     }
 
     @GetMapping(ApiEndPoints.PostController.GET_POST_BY_ID)
-    public ResponseEntity<?> getById(@RequestParam(required = true) Long id) {
-        final Optional post = this.postService.getById(id);
-        if (post.isPresent()) {
+    public ResponseEntity<?> getById(@RequestParam(required = true) String id) {
+        final Post post = this.postService.getById(id);
+        if (post != null) {
             return ResponseEntity.ok().body(new Response.Builder()
                     .withData(post)
                     .withMessage("Post Retrieved Successfully")

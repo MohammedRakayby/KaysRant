@@ -3,7 +3,7 @@ package com.rakayby.blog.controller;
 import com.rakayby.blog.constant.ApiEndPoints;
 import com.rakayby.blog.model.AuthRequest;
 import com.rakayby.blog.model.Response;
-import com.rakayby.blog.model.UserDTO;
+import com.rakayby.blog.model.UserProfile;
 import com.rakayby.blog.util.CookieUtils;
 import com.rakayby.blog.util.UserUtils;
 import lombok.RequiredArgsConstructor;
@@ -52,15 +52,15 @@ public class AuthController {
                             .withHttpStatus(HttpStatus.FORBIDDEN)
                             .withStatus(Boolean.FALSE).build());
         }
-        final UserDTO userDto = userUtils.createDTOFromUser((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        final UserProfile profile = userUtils.createProfileFromUser((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         final HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(HttpHeaders.SET_COOKIE, cookieUtils.createAccessTokenCookie(userDto.getUsername()).toString());
+        httpHeaders.add(HttpHeaders.SET_COOKIE, cookieUtils.createAccessTokenCookie(profile.getUsername()).toString());
         return ResponseEntity.ok()
                 .headers(httpHeaders)
                 .body(new Response.Builder()
                         .withMessage("Authenticated")
                         .withHttpStatus(HttpStatus.OK)
-                        .withData(userDto)
+                        .withData(profile.getUsername())
                         .withStatus(Boolean.TRUE).build());
     }
 

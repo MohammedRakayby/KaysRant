@@ -5,6 +5,7 @@ import com.rakayby.blog.model.Post;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import software.amazon.awssdk.services.dynamodb.model.DynamoDbException;
 
 /**
  *
@@ -16,10 +17,10 @@ public class PostService {
 
     private final PostRepository postRepository;
 
-    public Boolean savePost(Post post) {
-        return this.postRepository.save(post) != null;
+    public void savePost(Post post) throws DynamoDbException {
+        this.postRepository.save(post);
     }
-    
+
     public Post getById(String id) {
         return this.postRepository.getById(id);
     }

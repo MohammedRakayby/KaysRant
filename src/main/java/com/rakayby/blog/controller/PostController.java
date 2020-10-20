@@ -1,13 +1,11 @@
 package com.rakayby.blog.controller;
 
 import com.rakayby.blog.constant.ApiEndPoints;
+import com.rakayby.blog.constant.DbConstants;
 import com.rakayby.blog.db.service.PostService;
 import com.rakayby.blog.model.Post;
 import com.rakayby.blog.model.Response;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import software.amazon.awssdk.services.dynamodb.model.DynamoDbException;
 
 /**
  *
@@ -30,7 +29,15 @@ public class PostController {
 
     @PostMapping(ApiEndPoints.GenericEndpoints.CREATE)
     public Boolean savePost(@RequestBody Post post) {
-        return this.postService.savePost(post);
+        try {
+            this.postService.savePost(post);
+        } catch (DynamoDbException e) {
+            System.out.println("Insertion to table" + DbConstants.TABLES.POSTS + " failed");
+            return false;
+        }
+
+        System.out.println("Insertion to table" + DbConstants.TABLES.POSTS + " succeeded");
+        return true;
     }
 
     @GetMapping(ApiEndPoints.PostController.GET_ALL)

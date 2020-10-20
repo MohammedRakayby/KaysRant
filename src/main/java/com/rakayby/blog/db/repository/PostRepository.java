@@ -8,8 +8,12 @@ import java.util.List;
  * @author mohammed.rakayby
  */
 public interface PostRepository {
-    public Post save(Post p);
+
+    public void save(Post p);
+
     public Post getById(String id);
+
     public List<Post> getAll();
+
     public List<Post> getByTag(String tag);
 }

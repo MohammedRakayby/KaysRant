@@ -6,6 +6,7 @@ import com.rakayby.blog.db.service.PostService;
 import com.rakayby.blog.model.Post;
 import com.rakayby.blog.model.Response;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.DynamoDbException;
 
 /**
@@ -40,16 +42,15 @@ public class PostController {
         return true;
     }
 
-    @GetMapping(ApiEndPoints.PostController.GET_ALL)
-    public List<Post> getAll() {
-        List<Post> posts = this.postService.getAll();
-
+    @PostMapping(ApiEndPoints.PostController.GET_ALL)
+    public List<Post> getAll(@RequestParam Integer pageSize, @RequestBody Map<String, AttributeValue> exclusiveKey) {
+        List<Post> posts = this.postService.getAll(pageSize, exclusiveKey);
         return posts;
     }
 
     @GetMapping(ApiEndPoints.PostController.GET_POST_BY_ID)
-    public ResponseEntity<?> getById(@RequestParam(required = true) String id) {
-        final Post post = this.postService.getById(id);
+    public ResponseEntity<?> getById(@RequestParam(required = true) String id, @RequestParam(required = true) Long range) {
+        final Post post = this.postService.getById(id, range);
         if (post != null) {
             return ResponseEntity.ok().body(new Response.Builder()
                     .withData(post)

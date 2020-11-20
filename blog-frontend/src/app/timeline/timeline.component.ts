@@ -18,15 +18,14 @@ export class TimelineComponent implements OnInit {
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json'
-    }),
-    withCredentials: true,
+    })
   };
   ngOnInit() {
     this.getAllArticles();
   }
   getAllArticles() {
     let url = "http://localhost:8080" + Controllers.POST + Endpoints.GET_ALL;
-    this.httpClient.get(url).subscribe((posts: any) => { console.log(posts); this.postsArr = posts });
+    this.httpClient.post(url,"{}",this.httpOptions).subscribe((posts: any) => { console.log(posts); this.postsArr = posts });
     console.log(this.postsArr);
   }
 

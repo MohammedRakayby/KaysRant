@@ -1,10 +1,8 @@
 package com.rakayby.blog.db.repository;
 
 import com.rakayby.blog.model.Post;
+import java.util.List;
 import java.util.Map;
-import software.amazon.awssdk.core.pagination.sync.SdkIterable;
-import software.amazon.awssdk.enhanced.dynamodb.model.Page;
-import software.amazon.awssdk.enhanced.dynamodb.model.PageIterable;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 
 /**
@@ -17,7 +15,7 @@ public interface PostRepository {
 
     public Post getById(String id, Long range);
 
-    public PageIterable<Post> getAll(Integer pageSize, Map<String, AttributeValue> exclusiveStartKey);
+    public List<Post> getAll(Integer pageSize, Map<String, AttributeValue> exclusiveStartKey);
 
-    public SdkIterable<Page<Post>> getByTag(Integer pageSize, Map<String, AttributeValue> exclusiveStartKey, String tag);
+    public List<Post> getByTag(Integer pageSize, Map<String, AttributeValue> exclusiveStartKey, String tag);
 }

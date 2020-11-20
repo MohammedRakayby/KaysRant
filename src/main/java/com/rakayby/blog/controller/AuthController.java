@@ -4,7 +4,8 @@ import com.rakayby.blog.constant.ApiEndPoints;
 import com.rakayby.blog.model.AuthRequest;
 import com.rakayby.blog.model.Response;
 import com.rakayby.blog.model.UserProfile;
-import com.rakayby.blog.util.CookieUtils;
+import com.rakayby.blog.util.HttpUtils;
+import com.rakayby.blog.util.JwtUtils;
 import com.rakayby.blog.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -33,8 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
-    private final UserUtils userUtils;
-    private final CookieUtils cookieUtils;
+    private final JwtUtils jwtUtils;
 
     @PostMapping(ApiEndPoints.AuthController.LOGIN)
     public ResponseEntity<?> login(@RequestBody AuthRequest request) {
@@ -44,7 +44,7 @@ public class AuthController {
             );
         } catch (BadCredentialsException | InternalAuthenticationServiceException e) {
             HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.add(HttpHeaders.SET_COOKIE, cookieUtils.deleteAccessTokenCookie().toString());
+            httpHeaders.add(HttpHeaders.SET_COOKIE, HttpUtils.deleteAccessTokenCookie().toString());
             return ResponseEntity.ok()
                     .headers(httpHeaders)
                     .body(new Response.Builder()
@@ -52,15 +52,16 @@ public class AuthController {
                             .withHttpStatus(HttpStatus.FORBIDDEN)
                             .withStatus(Boolean.FALSE).build());
         }
-        final UserProfile profile = userUtils.createProfileFromUser((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        final UserProfile profile = UserUtils.createProfileFromUser((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         final HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(HttpHeaders.SET_COOKIE, cookieUtils.createAccessTokenCookie(profile.getUsername()).toString());
+
+        httpHeaders.add(HttpHeaders.SET_COOKIE, HttpUtils.createAccessTokenCookie(jwtUtils.generateToken(profile.getUsername())).toString());
         return ResponseEntity.ok()
                 .headers(httpHeaders)
                 .body(new Response.Builder()
                         .withMessage("Authenticated")
                         .withHttpStatus(HttpStatus.OK)
-                        .withData(profile.getUsername())
+                        //                        .withData(profile.getUsername())
                         .withStatus(Boolean.TRUE).build());
     }
 
@@ -68,7 +69,7 @@ public class AuthController {
     public ResponseEntity logout() {
         final HttpHeaders httpHeaders = new HttpHeaders();
         SecurityContextHolder.clearContext();
-        httpHeaders.add(HttpHeaders.SET_COOKIE, cookieUtils.deleteAccessTokenCookie().toString());
+        httpHeaders.add(HttpHeaders.SET_COOKIE, HttpUtils.deleteAccessTokenCookie().toString());
         return ResponseEntity.ok().headers(httpHeaders).body(new Response.Builder().withMessage("Logout successful").withStatus(Boolean.TRUE).build());
     }
 }

@@ -3,9 +3,10 @@ package com.rakayby.blog.controller;
 import com.rakayby.blog.constant.ApiEndPoints;
 import com.rakayby.blog.constant.DbConstants;
 import com.rakayby.blog.db.service.PostService;
+import com.rakayby.blog.model.Page;
 import com.rakayby.blog.model.Post;
 import com.rakayby.blog.model.Response;
-import java.util.List;
+import com.rakayby.blog.util.HttpUtils;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.DynamoDbException;
 
 /**
@@ -43,17 +43,21 @@ public class PostController {
     }
 
     @PostMapping(ApiEndPoints.PostController.GET_ALL)
-    public List<Post> getAll(@RequestParam Integer pageSize, @RequestBody Map<String, AttributeValue> exclusiveKey) {
-        List<Post> posts = this.postService.getAll(pageSize, exclusiveKey);
-        return posts;
+    public ResponseEntity getAll(@RequestParam(required = false) Integer pageSize, @RequestBody Map<String, Object> exclusiveKey) {
+        Page page = this.postService.getAll(pageSize, HttpUtils.convertToAttributeMap(exclusiveKey));
+        return ResponseEntity.ok().body(new Response.Builder()
+                .withData(page)
+                .withMessage("Retrieved " + page.getContentList().size() + " posts")
+                .withStatus(Boolean.TRUE)
+                .build());
     }
 
     @GetMapping(ApiEndPoints.PostController.GET_POST_BY_ID)
-    public ResponseEntity<?> getById(@RequestParam(required = true) String id, @RequestParam(required = true) Long range) {
+    public ResponseEntity getById(@RequestParam String id, @RequestParam Long range) {
         final Post post = this.postService.getById(id, range);
         if (post != null) {
             return ResponseEntity.ok().body(new Response.Builder()
-                    .withData(post)
+                    //                    .withData(post)
                     .withMessage("Post Retrieved Successfully")
                     .withStatus(Boolean.TRUE));
         }
@@ -62,19 +66,17 @@ public class PostController {
                 .withStatus(Boolean.FALSE));
     }
 
-//    @GetMapping(ApiEndPoints.PostController.GET_POST_BY_SLUG)
-//    public ResponseEntity<?> getBySlug(@RequestParam(required = true) String slug) {
-//        final Optional<Post> post = this.postService.getBySlug(slug);
-//        if (post.isPresent()) {
-//            return ResponseEntity.ok().body(new Response.Builder()
-//                    .withData(post.get())
-//                    .withMessage("Found post with id" + post.map(Post::getId))
-//                    .withStatus(Boolean.TRUE)
-//                    .build());
-//        }
-//        return ResponseEntity.ok().body(new Response.Builder()
-//                .withMessage("Failed to find post")
-//                .withStatus(Boolean.FALSE)
-//                .build());
-//    }
+    @GetMapping(ApiEndPoints.PostController.GET_BY_TAG)
+    public ResponseEntity getByTag(@RequestParam String tag,
+            @RequestParam(required = false) Integer pageSize,
+            @RequestBody Map<String, Object> exclusiveKey) {
+
+        final Page page = this.postService.getByTag(pageSize, HttpUtils.convertToAttributeMap(exclusiveKey), tag);
+        return ResponseEntity.ok().body(new Response.Builder()
+                .withData(page)
+                .withMessage("Retrieved " + page.getContentList().size() + " posts under Tag: " + tag)
+                .withStatus(Boolean.TRUE)
+                .build()
+        );
+    }
 }

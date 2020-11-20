@@ -26,6 +26,7 @@ public class ApiEndPoints {
         public static final String GET_ALL = "getAll";
         public static final String GET_POST_BY_ID = "getById";
         public static final String GET_POST_BY_SLUG = "getBySlug";
+        public static final String GET_BY_TAG = "getByTag";
     }
 
     public static class AuthController {

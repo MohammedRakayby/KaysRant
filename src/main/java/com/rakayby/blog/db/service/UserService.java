@@ -19,7 +19,6 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 //    private final AmazonDynamoDB amazonDynamoDB;
-    private final UserUtils userUtils;
 
 //    @PostConstruct
 //    private void init() throws InterruptedException, TableNeverTransitionedToStateException {
@@ -39,7 +38,7 @@ public class UserService implements UserDetailsService {
 
         final UserProfile user = userRepository.get(username);
         if (user != null) {
-            return userUtils.createUserFromProfile(user);
+            return UserUtils.createUserFromProfile(user);
         }
         throw new BadCredentialsException("Wrong username or password");
     }

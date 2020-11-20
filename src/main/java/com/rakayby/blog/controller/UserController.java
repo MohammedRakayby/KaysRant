@@ -4,7 +4,8 @@ import com.rakayby.blog.constant.ApiEndPoints;
 import com.rakayby.blog.db.service.UserService;
 import com.rakayby.blog.model.Response;
 import com.rakayby.blog.model.UserProfile;
-import com.rakayby.blog.util.CookieUtils;
+import com.rakayby.blog.util.HttpUtils;
+import com.rakayby.blog.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final CookieUtils cookieUtils;
+    private final JwtUtils jwtUtils;
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
 
@@ -44,7 +45,8 @@ public class UserController {
         }
 
         final HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(HttpHeaders.SET_COOKIE, cookieUtils.createAccessTokenCookie(user.getUsername()).toString());
+
+        httpHeaders.add(HttpHeaders.SET_COOKIE, HttpUtils.createAccessTokenCookie(jwtUtils.generateToken(user.getUsername())).toString());
         return ResponseEntity.ok()
                 .headers(httpHeaders)
                 .body(new Response.Builder().withMessage("Registeration Successful").withHttpStatus(HttpStatus.OK).withStatus(Boolean.TRUE).build());
@@ -60,7 +62,7 @@ public class UserController {
         return ResponseEntity.ok().body(new Response.Builder()
                 .withMessage("Logged in")
                 .withStatus(Boolean.TRUE)
-                .withData(user.getUsername())
+                //                .withData(user.getUsername())
                 .build());
     }
 }

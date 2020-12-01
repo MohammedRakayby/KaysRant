@@ -1,1 +1,6 @@
 <p>singlepost works!</p>
+<div *ngIf="post">
+    <!-- re-evaluate this flow -->
+    {{post.content}}
+    {{post|json}}
+</div>

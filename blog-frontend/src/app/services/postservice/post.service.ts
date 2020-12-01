@@ -9,7 +9,7 @@ import { map } from 'rxjs/operators';
 export class PostService {
   constructor() { }
   private readonly _posts = new BehaviorSubject<Post[]>([]);
-
+  private lastEvaluatedKey=new Map<String,String>();
   readonly posts$ = this._posts.asObservable();
 
   getPosts() {
@@ -30,16 +30,27 @@ export class PostService {
       newPost
     ];
   }
-  removePost(id: number) {
+  replacePosts(posts:Post[]){
+    this.posts=posts;
+  }
+  removePost(id: string) {
     this.posts = this.posts.filter(post => post.id !== id);
   }
 
-  findPost(id: number | string) {
-    return this._posts.pipe(
-      map((posts: Post[]) => 
-        posts.find(post => {
-          post.id === +id || post.slug === id
-        }))
-    )
+  findPost(slug: string) {
+    // return this._posts.pipe(
+    //   map((posts: Post[]) => 
+    //     posts.find(post => {
+    //       post.id === id 
+    //     }))
+    // )
+    return this.posts.find(post => post.slug===slug);
+  }
+
+  setLastEvaluatedKey(key){
+    this.lastEvaluatedKey=key;
+  }
+  getLastEvaluatedKey():Map<String,String>{
+    return this.lastEvaluatedKey;
   }
 }

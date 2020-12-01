@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-center flex-wrap main-flex">
-    <mat-card *ngFor="let post of postsArr" class="post m-4">
+    <mat-card *ngFor="let post of postsArr$ | async" class="post m-4">
         <mat-card-header>
             <!-- <div mat-card-avatar class="example-header-image"></div> -->
             <mat-card-title>{{post.title}}</mat-card-title>
@@ -14,7 +14,7 @@
         </mat-card-content>
         <mat-card-actions>
             <!-- <button mat-button>Read More </button> -->
-            <a [routerLink]="['/posts', post.tag ]">Read More</a> <!--will replace with slug-->
+            <a [routerLink]="['/posts', post.slug ]">Read More</a> <!--will replace with slug-->
         </mat-card-actions>
         <mat-card-footer>
             <p> {{post.date | date:'shortDate'}} |

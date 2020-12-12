@@ -14,9 +14,9 @@ export class LoggedAdminGuard implements CanActivate {
     let status: boolean = false;
     if (this.userService.isLoggedIn) {
       let user: User = this.userService.state;
-      if (user.userName.length > 0 && user.role === 'admin') {
+      // if (user.userName.length > 0) {
         status = true;
-      }
+      // }
     }
     return status;
   }

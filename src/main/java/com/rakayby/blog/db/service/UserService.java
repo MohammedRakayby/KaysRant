@@ -9,8 +9,10 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 /**
- *
  * @author Rakayby
  */
 @Service
@@ -20,7 +22,7 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
 //    private final AmazonDynamoDB amazonDynamoDB;
 
-//    @PostConstruct
+    //    @PostConstruct
 //    private void init() throws InterruptedException, TableNeverTransitionedToStateException {
 //        TableUtils.createTableIfNotExists(amazonDynamoDB, new CreateTableRequest(Arrays.asList(new AttributeDefinition("username", ScalarAttributeType.S)),
 //                "User",
@@ -28,17 +30,21 @@ public class UserService implements UserDetailsService {
 //                new ProvisionedThroughput(5L, 5L)));
 //        TableUtils.waitUntilActive(amazonDynamoDB, "User");
 //    }
-    public UserProfile create(UserProfile user) {
-
-        return this.userRepository.save(user);
+    public Boolean create(UserProfile user) {
+        if (userRepository.getUserCount() < 1) {
+            user.setCreationDate(LocalDateTime.now());
+            return this.userRepository.save(user);
+        } else {
+            return Boolean.FALSE;
+        }
     }
 
     @Override
     public User loadUserByUsername(String username) {
 
-        final UserProfile user = userRepository.get(username);
-        if (user != null) {
-            return UserUtils.createUserFromProfile(user);
+        final Optional<UserProfile> user = userRepository.get(username);
+        if (user.isPresent()) {
+            return UserUtils.createUserFromProfile(user.get());
         }
         throw new BadCredentialsException("Wrong username or password");
     }

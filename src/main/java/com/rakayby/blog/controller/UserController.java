@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- *
  * @author Mohammed.Rakayby
  */
 @RestController
@@ -37,32 +36,43 @@ public class UserController {
     @PostMapping(ApiEndPoints.GenericEndpoints.CREATE)
     public ResponseEntity create(@RequestBody UserProfile user) {
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         try {
-            userService.create(user);
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            Boolean userFetched = this.userService.create(user);
+            if (userFetched) {
+                final HttpHeaders httpHeaders = new HttpHeaders();
+                httpHeaders.add(HttpHeaders.SET_COOKIE,
+                        HttpUtils.createAccessTokenCookie(jwtUtils.generateToken(user.getUsername())).toString());
+                return ResponseEntity.ok()
+                        .headers(httpHeaders)
+                        .body(new Response.Builder()
+                                .withMessage("Registeration Successful")
+//                                .withHttpStatus(HttpStatus.OK)
+                                .withStatus(Boolean.TRUE)
+                                .build());
+            } else {
+                return ResponseEntity.ok().body(new Response.Builder()
+                        .withMessage("User already created")
+//                        .withHttpStatus(HttpStatus.OK)
+                        .withStatus(Boolean.FALSE)
+                        .build());
+            }
         } catch (Exception e) {
             return ResponseEntity.ok().body(new Response.Builder().withMessage("Failed, User already exists").withStatus(Boolean.FALSE).build());
         }
-
-        final HttpHeaders httpHeaders = new HttpHeaders();
-
-        httpHeaders.add(HttpHeaders.SET_COOKIE, HttpUtils.createAccessTokenCookie(jwtUtils.generateToken(user.getUsername())).toString());
-        return ResponseEntity.ok()
-                .headers(httpHeaders)
-                .body(new Response.Builder().withMessage("Registeration Successful").withHttpStatus(HttpStatus.OK).withStatus(Boolean.TRUE).build());
     }
 
-    @GetMapping(value = ApiEndPoints.GenericEndpoints.GET)
-    public ResponseEntity getUser() {
-        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth.getName().equals("anonymousUser")) {
-            return ResponseEntity.ok().body(new Response.Builder().withMessage("User is not logged").withStatus(Boolean.FALSE).build());
-        }
-        final User user = userService.loadUserByUsername(auth.getName());
-        return ResponseEntity.ok().body(new Response.Builder()
-                .withMessage("Logged in")
-                .withStatus(Boolean.TRUE)
-                //                .withData(user.getUsername())
-                .build());
-    }
+//    @GetMapping(value = ApiEndPoints.GenericEndpoints.GET)
+//    public ResponseEntity getUser() {
+//        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        if (auth.getName().equals("anonymousUser")) {
+//            return ResponseEntity.ok().body(new Response.Builder().withMessage("User is not logged").withStatus(Boolean.FALSE).build());
+//        }
+//        final User user = userService.loadUserByUsername(auth.getName());
+//        return ResponseEntity.ok().body(new Response.Builder()
+//                .withMessage("Logged in")
+//                .withStatus(Boolean.TRUE)
+//                //                .withData(user.getUsername())
+//                .build());
+//    }
 }

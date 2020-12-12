@@ -3,11 +3,6 @@ package com.rakayby.blog.db.repository.impl;
 import com.rakayby.blog.constant.DbConstants;
 import com.rakayby.blog.db.repository.PostRepository;
 import com.rakayby.blog.model.Post;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
@@ -21,20 +16,29 @@ import software.amazon.awssdk.enhanced.dynamodb.model.ScanEnhancedRequest;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.DynamoDbException;
 
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 /**
- *
  * @author Rakayby
  */
 @Repository
-@RequiredArgsConstructor
 public class PostRepositoryImpl implements PostRepository {
 
+    private final DynamoDbTable<Post> postsTable;
     private final DynamoDbEnhancedClient dbEnhancedClient;
+
+    public PostRepositoryImpl(DynamoDbEnhancedClient dbEnhancedClient) {
+        this.dbEnhancedClient = dbEnhancedClient;
+        this.postsTable = dbEnhancedClient.table(DbConstants.TABLES.POSTS, TableSchema.fromClass(Post.class));
+    }
 
     @Value("${db.default_page_size}")
     private Integer defaultPageSize;
 
-//    @PostConstruct
+    //    @PostConstruct
 //    private void init() throws InterruptedException {
 //        Post p = new Post();
 //        p.setContent("THIS IS CONTENT");
@@ -46,20 +50,17 @@ public class PostRepositoryImpl implements PostRepository {
 //    }
     @Override
     public void save(Post p) throws DynamoDbException {
-        DynamoDbTable<Post> postsTable = dbEnhancedClient.table(DbConstants.TABLES.POSTS, TableSchema.fromClass(Post.class));
-        postsTable.putItem(p);
+        this.postsTable.putItem(p);
     }
 
     @Override
     public Post getById(String id, Long range) {
-        DynamoDbTable<Post> postsTable = dbEnhancedClient.table(DbConstants.TABLES.POSTS, TableSchema.fromClass(Post.class));
-        return postsTable.getItem(Key.builder().partitionValue(id).sortValue(range).build());
+        return this.postsTable.getItem(Key.builder().partitionValue(id).sortValue(range).build());
     }
 
     @Override
     public List<Post> getAll(Integer pageSize, Map<String, AttributeValue> exclusiveStartKey) {
-        DynamoDbTable<Post> postsTable = dbEnhancedClient.table(DbConstants.TABLES.POSTS, TableSchema.fromClass(Post.class));
-        Iterator<Page<Post>> pi = postsTable.scan(ScanEnhancedRequest.builder()
+        Iterator<Page<Post>> pi = this.postsTable.scan(ScanEnhancedRequest.builder()
                 .exclusiveStartKey(exclusiveStartKey.isEmpty() ? null : exclusiveStartKey)
                 .limit(pageSize == null ? this.defaultPageSize : pageSize)
                 .build()).iterator();
@@ -78,8 +79,7 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public List<Post> getByTag(Integer pageSize, Map<String, AttributeValue> exclusiveStartKey, String tag) {
-        DynamoDbTable<Post> postsTable = dbEnhancedClient.table(DbConstants.TABLES.POSTS, TableSchema.fromClass(Post.class));
-        Iterator<Page<Post>> pi = postsTable.index(DbConstants.TABLES.INDECES.POSTS_INDEX)
+        Iterator<Page<Post>> pi = this.postsTable.index(DbConstants.TABLES.INDECES.POSTS_INDEX)
                 .query(QueryEnhancedRequest.builder()
                         .queryConditional(QueryConditional.keyEqualTo(Key.builder().sortValue(tag).build()))
                         .exclusiveStartKey(exclusiveStartKey)

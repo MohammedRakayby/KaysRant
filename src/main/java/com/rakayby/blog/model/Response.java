@@ -11,13 +11,13 @@ import org.springframework.http.HttpStatus;
 public class Response {
 
     private final String message;
-    private final HttpStatus httpStatus;
+//    private final HttpStatus httpStatus;
     private final Boolean status;
     private final Object data;
 
     private Response(Builder builder) {
         this.message = builder.message;
-        this.httpStatus = builder.httpStatus;
+//        this.httpStatus = builder.httpStatus;
         this.status = builder.status;
         this.data = builder.data;
     }
@@ -25,7 +25,7 @@ public class Response {
     public static class Builder {
 
         private String message;
-        private HttpStatus httpStatus;
+//        private HttpStatus httpStatus;
         private Boolean status;
         private Object data;
 
@@ -38,10 +38,10 @@ public class Response {
             return this;
         }
 
-        public Builder withHttpStatus(HttpStatus httpStatus) {
-            this.httpStatus = httpStatus;
-            return this;
-        }
+//        public Builder withHttpStatus(HttpStatus httpStatus) {
+//            this.httpStatus = httpStatus;
+//            return this;
+//        }
 
         public Builder withStatus(Boolean status) {
             this.status = status;

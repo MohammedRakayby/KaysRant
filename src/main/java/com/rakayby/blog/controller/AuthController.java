@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- *
  * @author Mohammed.Rakayby
  */
 @RestController
@@ -37,7 +36,7 @@ public class AuthController {
     private final JwtUtils jwtUtils;
 
     @PostMapping(ApiEndPoints.AuthController.LOGIN)
-    public ResponseEntity<?> login(@RequestBody AuthRequest request) {
+    public ResponseEntity login(@RequestBody AuthRequest request) {
         try {
             SecurityContextHolder.getContext().setAuthentication(
                     authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()))
@@ -49,7 +48,7 @@ public class AuthController {
                     .headers(httpHeaders)
                     .body(new Response.Builder()
                             .withMessage("Invalid username or password")
-                            .withHttpStatus(HttpStatus.FORBIDDEN)
+//                            .withHttpStatus(HttpStatus.FORBIDDEN)
                             .withStatus(Boolean.FALSE).build());
         }
         final UserProfile profile = UserUtils.createProfileFromUser((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
@@ -60,8 +59,8 @@ public class AuthController {
                 .headers(httpHeaders)
                 .body(new Response.Builder()
                         .withMessage("Authenticated")
-                        .withHttpStatus(HttpStatus.OK)
-                        //                        .withData(profile.getUsername())
+//                        .withHttpStatus(HttpStatus.OK)
+                        .withData(profile.getUsername())
                         .withStatus(Boolean.TRUE).build());
     }
 

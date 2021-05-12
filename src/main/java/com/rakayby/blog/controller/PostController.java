@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import software.amazon.awssdk.services.dynamodb.model.DynamoDbException;
 
 /**
- *
  * @author Mohammed.Rakayby
  */
 @RequiredArgsConstructor
@@ -43,40 +42,60 @@ public class PostController {
     }
 
     @PostMapping(ApiEndPoints.PostController.GET_ALL)
-    public ResponseEntity getAll(@RequestParam(required = false) Integer pageSize, @RequestBody Map<String, Object> exclusiveKey) {
-        Page page = this.postService.getAll(pageSize, HttpUtils.convertToAttributeMap(exclusiveKey));
-        return ResponseEntity.ok().body(new Response.Builder()
-                .withData(page)
-                .withMessage("Retrieved " + page.getContentList().size() + " posts")
-                .withStatus(Boolean.TRUE)
-                .build());
+    public ResponseEntity<Response> getAll(@RequestParam(required = false) Integer pageSize, @RequestBody Map<String, Object> exclusiveKey) {
+        try {
+            Page page = this.postService.getAll(pageSize, HttpUtils.convertToAttributeMap(exclusiveKey));
+            return ResponseEntity.ok().body(new Response.Builder()
+                    .withData(page)
+                    .withMessage("Retrieved " + page.getContentList().size() + " posts")
+                    .withStatus(Boolean.TRUE)
+                    .build());
+        } catch (Exception e) {
+            //todo: create a custom exception
+            return ResponseEntity.ok().body(new Response.Builder()
+                    .withMessage("Failed to retrieve posts")
+                    .withStatus(Boolean.FALSE)
+                    .build());
+        }
     }
 
     @GetMapping(ApiEndPoints.PostController.GET_POST_BY_ID)
-    public ResponseEntity getById(@RequestParam String id, @RequestParam Long range) {
-        final Post post = this.postService.getById(id, range);
-        if (post != null) {
-            return ResponseEntity.ok().body(new Response.Builder()
-                    //                    .withData(post)
-                    .withMessage("Post Retrieved Successfully")
-                    .withStatus(Boolean.TRUE));
+    public ResponseEntity<Response> getById(@RequestParam String id, @RequestParam Long range) {
+        try {
+            final Post post = this.postService.getById(id, range);
+            if (post != null) {
+                return ResponseEntity.ok().body(new Response.Builder()
+                        .withData(post)
+                        .withMessage("Post Retrieved Successfully")
+                        .withStatus(Boolean.TRUE)
+                        .build());
+            }
+        } catch (Exception e) {
+            System.out.println("err");
         }
         return ResponseEntity.ok().body(new Response.Builder()
                 .withMessage("Post With id" + id + " not found")
-                .withStatus(Boolean.FALSE));
+                .withStatus(Boolean.FALSE)
+                    .build());
     }
 
     @GetMapping(ApiEndPoints.PostController.GET_BY_TAG)
-    public ResponseEntity getByTag(@RequestParam String tag,
-            @RequestParam(required = false) Integer pageSize,
-            @RequestBody Map<String, Object> exclusiveKey) {
-
-        final Page page = this.postService.getByTag(pageSize, HttpUtils.convertToAttributeMap(exclusiveKey), tag);
-        return ResponseEntity.ok().body(new Response.Builder()
-                .withData(page)
-                .withMessage("Retrieved " + page.getContentList().size() + " posts under Tag: " + tag)
-                .withStatus(Boolean.TRUE)
-                .build()
-        );
+    public ResponseEntity<Response> getByTag(@RequestParam String tag,
+                                             @RequestParam(required = false) Integer pageSize,
+                                             @RequestBody Map<String, Object> exclusiveKey) {
+        try {
+            final Page page = this.postService.getByTag(pageSize, HttpUtils.convertToAttributeMap(exclusiveKey), tag);
+            return ResponseEntity.ok().body(new Response.Builder()
+                    .withData(page)
+                    .withMessage("Retrieved " + page.getContentList().size() + " posts under Tag: " + tag)
+                    .withStatus(Boolean.TRUE)
+                    .build()
+            );
+        } catch (Exception e) {
+            return ResponseEntity.ok().body(new Response.Builder()
+                    .withMessage("Failed to Retrieve posts under Tag: " + tag)
+                    .withStatus(Boolean.FALSE)
+                    .build());
+        }
     }
 }
